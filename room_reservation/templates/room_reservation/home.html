@@ -1,4 +1,13 @@
 {% include 'room_reservation/base.html' %}
 {% block content %}
-<p> Home </p>
+
+    {% for hotel in hotels %}
+    <div class="hotels_div">
+    <h1> {{ hotel.hotel_name }}</h1>
+    <h>{{ hotel.address}}, {{ hotel.city_name }}</h>
+    <p> {{ hotel.hotel_description }}</p>
+    <img src="{{ hotel.hotel_image.url }}">
+    </div>
+    {% endfor %}
+    
 {% endblock %}

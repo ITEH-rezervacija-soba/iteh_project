@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from .forms import CreateUserForm
+from .models import HotelModel
 
 
 @csrf_protect
@@ -23,7 +24,8 @@ def login_user(request):
 
 
 def homepage(request):
-    return render(request, 'room_reservation/home.html')
+    hotels = HotelModel.objects.all()
+    return render(request, 'room_reservation/home.html', {'hotels': hotels})
 
 
 @csrf_protect

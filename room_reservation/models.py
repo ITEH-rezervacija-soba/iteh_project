@@ -7,7 +7,8 @@ class HotelModel(models.Model):
     hotel_name = models.CharField(max_length=255, blank=False)
     address = models.CharField(max_length=255, blank=False)
     category = models.CharField(max_length=255, blank=False)
-    hotel_image = models.ImageField(upload_to=None)
+    hotel_image = models.ImageField(upload_to='hotels')
+    hotel_description = models.TextField(default="")
 
 
 BED_CHOICES = [
@@ -32,7 +33,7 @@ class AccommodationModel(models.Model):
 class AccommodationImageModel(models.Model):
     accommodation = models.ForeignKey(AccommodationModel, null=False, on_delete=models.CASCADE)
     image_name = models.CharField(max_length=255, null=False)
-    image = models.ImageField(upload_to=None)
+    image = models.ImageField(upload_to='accommodation')
 
 
 class ReservationModel(models.Model):
