@@ -1,4 +1,17 @@
 {% include 'room_reservation/base.html' %}
 {% block content %}
-    <p> Hotels </p>
+    <br>
+    <form method="GET">
+    {{my_filter.form}}
+    <button type="submit">Search</button>
+    </form>
+    <br>
+    {% for hotel in hotels %}
+    <div class="hotels_div">
+        <h1> <a href="{% url 'hotel_page' hotel.id %}"> {{ hotel.hotel_name }} </a></h1>
+    <h>{{ hotel.address}}, {{ hotel.city_name }}</h>
+    <p> {{ hotel.hotel_description }}</p>
+    <img src="{{ hotel.hotel_image.url }}">
+    </div>
+    {% endfor %}
 {% endblock %}

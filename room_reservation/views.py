@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
+
+from .filters import HotelFilter
 from .forms import CreateUserForm
 from .models import HotelModel
 
@@ -19,13 +21,12 @@ def login_user(request):
             login(request, user)
             return redirect('homepage')
         else:
-            messages.info(request, "Username of password is incorrect.")
+            messages.info(request, "Username or password is incorrect.")
     return render(request, 'room_reservation/login.html')
 
 
 def homepage(request):
-    hotels = HotelModel.objects.all()
-    return render(request, 'room_reservation/home.html', {'hotels': hotels})
+    return render(request, 'room_reservation/home.html')
 
 
 @csrf_protect
@@ -65,4 +66,14 @@ def user_profile(request):
 
 
 def hotels(request):
-    return render(request, 'room_reservation/hotels.html')
+    hotels = HotelModel.objects.all()
+    my_filter = HotelFilter(request.GET, queryset=hotels)
+    hotels = my_filter.qs
+    context = {"hotels": hotels, "my_filter": my_filter}
+    return render(request, 'room_reservation/hotels.html', context)
+
+
+def hotel_page(request, pk):
+    hotel = HotelModel.objects.get(id=pk)
+    context = {"hotel": hotel}
+    return render(request, 'room_reservation/hotel_page.html', context)

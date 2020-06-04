@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from .views import login_user, homepage, register, logout_user, user_profile, hotels
+from .views import login_user, homepage, register, logout_user, user_profile, hotels, hotel_page
 
 urlpatterns = [
     path('login/', login_user, name='login'),
@@ -12,6 +12,7 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('logout/', logout_user, name='logout'),
     path('profile/', user_profile, name='profile'),
-    path('hotels/', hotels, name='hotels')
+    path('hotels/', hotels, name='hotels'),
+    path('hotels/<int:pk>/', hotel_page, name="hotel_page"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
