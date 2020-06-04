@@ -6,12 +6,25 @@
     <button type="submit">Search</button>
     </form>
     <br>
+
     {% for hotel in hotels %}
-    <div class="hotels_div">
-        <h1> <a href="{% url 'hotel_page' hotel.id %}"> {{ hotel.hotel_name }} </a></h1>
-    <h>{{ hotel.address}}, {{ hotel.city_name }}</h>
-    <p> {{ hotel.hotel_description }}</p>
-    <img src="{{ hotel.hotel_image.url }}">
+
+    <div class="hotel_card">
+    <div class="card mb-3" style="max-width: 1080px;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{{ hotel.hotel_image.url }}" class="card-img" alt="Hotel image">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'hotel_page' hotel.id %}"> {{ hotel.hotel_name }} </a></h5>
+            <p class="card-text">  {{ hotel.address}}, {{ hotel.city_name }} </p>
+            <p class="card-text"><small class="text-muted"> {{ hotel.hotel_description }} </small></p>
+          </div>
+        </div>
+      </div>
     </div>
+    </div>
+
     {% endfor %}
 {% endblock %}
