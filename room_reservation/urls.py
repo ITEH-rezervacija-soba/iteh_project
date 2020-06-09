@@ -1,9 +1,11 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import RedirectView
 
 from .views import login_user, homepage, register, logout_user, user_profile, hotels, hotel_page
+
 
 urlpatterns = [
     path('login/', login_user, name='login'),

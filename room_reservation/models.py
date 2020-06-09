@@ -45,3 +45,4 @@ class ReservationModel(models.Model):
     end_date = models.DateField()
     total_price = models.DecimalField(decimal_places=2, max_digits=10)
 
+
