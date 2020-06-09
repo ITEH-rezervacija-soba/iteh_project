@@ -12,12 +12,12 @@ class HotelModel(models.Model):
 
 
 BED_CHOICES = [
-    ('1', 'One'),
-    ('2', 'Two'),
-    ('3', 'Three'),
-    ('4', 'Four'),
-    ('5', 'Five'),
-    ('6', 'Six'),
+    (1, 'One'),
+    (2, 'Two'),
+    (3, 'Three'),
+    (4, 'Four'),
+    (5, 'Five'),
+    (6, 'Six'),
 ]
 
 

@@ -5,9 +5,10 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 
 from .filters import HotelFilter
-from .forms import CreateUserForm
-from .models import HotelModel
+from .forms import CreateUserForm, CreateReservationForm
+from .models import HotelModel, AccommodationModel
 
+from datetime import date
 
 @csrf_protect
 def login_user(request):
@@ -74,6 +75,15 @@ def hotels(request):
 
 
 def hotel_page(request, pk):
+    form = CreateReservationForm()
     hotel = HotelModel.objects.get(id=pk)
-    context = {"hotel": hotel}
+    rooms = AccommodationModel.objects.filter(hotel=pk)
+    if request.method == 'POST':
+        form = CreateReservationForm(request.POST, initial={"user":request.user, "accommodation":pk,
+                                                           "reservation_date": date.today(), })
+        if form.is_valid():
+
+            form.save()
+            return redirect('room_reservation/home.html')
+    context = {"form": form, "hotel": hotel, "rooms": rooms}
     return render(request, 'room_reservation/hotel_page.html', context)
