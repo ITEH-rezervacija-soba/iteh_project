@@ -6,9 +6,10 @@ from django.views.decorators.csrf import csrf_protect
 
 from .filters import HotelFilter
 from .forms import CreateUserForm, CreateReservationForm
-from .models import HotelModel, AccommodationModel
+from .models import HotelModel, AccommodationModel, HotelImageModel
 
 from datetime import date
+
 
 @csrf_protect
 def login_user(request):
@@ -77,13 +78,13 @@ def hotels(request):
 def hotel_page(request, pk):
     form = CreateReservationForm()
     hotel = HotelModel.objects.get(id=pk)
+    images = HotelImageModel.objects.filter(hotel=pk)
     rooms = AccommodationModel.objects.filter(hotel=pk)
     if request.method == 'POST':
-        form = CreateReservationForm(request.POST, initial={"user":request.user, "accommodation":pk,
-                                                           "reservation_date": date.today(), })
+        form = CreateReservationForm(request.POST, initial={"user": request.user, "accommodation": pk,
+                                                            "reservation_date": date.today(), })
         if form.is_valid():
-
             form.save()
             return redirect('room_reservation/home.html')
-    context = {"form": form, "hotel": hotel, "rooms": rooms}
+    context = {"form": form, "hotel": hotel, "images": images, "rooms": rooms}
     return render(request, 'room_reservation/hotel_page.html', context)

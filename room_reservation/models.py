@@ -1,3 +1,5 @@
+from warnings import onceregistry
+
 import django
 from django.db import models
 
@@ -30,10 +32,9 @@ class AccommodationModel(models.Model):
     price_per_night = models.DecimalField(decimal_places=2, max_digits=10)
 
 
-class AccommodationImageModel(models.Model):
-    accommodation = models.ForeignKey(AccommodationModel, null=False, on_delete=models.CASCADE)
-    image_name = models.CharField(max_length=255, null=False)
-    image = models.ImageField(upload_to='accommodation')
+class HotelImageModel(models.Model):
+    hotel = models.ForeignKey(HotelModel, null=False, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/hotels')
 
 
 class ReservationModel(models.Model):
