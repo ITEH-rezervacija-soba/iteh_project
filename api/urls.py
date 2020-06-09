@@ -8,10 +8,10 @@ from .views import api_overview, wish_list, wish_detail, wish_create, wish_updat
 
 urlpatterns = [
 
-    path('api/', api_overview, name="api_overview"),
-    path('api/wish-list/', wish_list, name="wish_list"),
-    path('api/wish-detail/<str:pk>/', wish_detail, name="wish_detail"),
-    path('api/wish-create/', wish_create, name="wish_create"),
-    path('api/wish-update/<str:pk>', wish_update, name="wish_update"),
-    path('api/wish-delete/<str:pk>', wish_delete, name="wish_delete"),
+    path('', api_overview, name="api_overview"),
+    path('wish-list/', wish_list, name="wish_list"),
+    path('wish-detail/<str:pk>/', wish_detail, name="wish_detail"),
+    path('wish-create/', wish_create, name="wish_create"),
+    path('wish-update/<str:pk>', wish_update, name="wish_update"),
+    path('wish-delete/<str:pk>', wish_delete, name="wish_delete"),
 ]

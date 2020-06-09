@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
+from django.core.paginator import Paginator
 
 from .filters import HotelFilter
 from .forms import CreateUserForm, CreateReservationForm
@@ -71,6 +72,11 @@ def hotels(request):
     hotels = HotelModel.objects.all()
     my_filter = HotelFilter(request.GET, queryset=hotels)
     hotels = my_filter.qs
+
+    paginator = Paginator(hotels, 3)
+    page = request.GET.get('page')
+    hotels = paginator.get_page(page)
+
     context = {"hotels": hotels, "my_filter": my_filter}
     return render(request, 'room_reservation/hotels.html', context)
 

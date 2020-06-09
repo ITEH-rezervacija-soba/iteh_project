@@ -1,5 +1,6 @@
 {% include 'room_reservation/base.html' %}
 {% block content %}
+
     <br>
     <form method="GET">
     {{my_filter.form}}
@@ -27,4 +28,15 @@
     </div>
 
     {% endfor %}
+
+    <div class="paginator">
+    {% for num in hotels.paginator.page_range %}
+        {% if hotels.number == num %}
+            <span class="pagination-number pagination-current">{{ num }}</span>
+        {% elif num > hotels.number|add:'-2' and num < hotels.number|add:'2' %}
+            <a class="pagination-number" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    </div>
+
 {% endblock %}
