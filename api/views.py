@@ -18,7 +18,8 @@ def api_overview(request):
 
 @api_view(['GET'])
 def wish_list(request):
-    wishes = WishModel.objects.all().order_by('-id')
+
+    wishes = WishModel.objects.all().filter(user=request.user).order_by('-id')
     serializer = WishModelSerializer(wishes, many=True)
     return Response(serializer.data)
 
@@ -34,7 +35,7 @@ def wish_detail(request, pk):
 def wish_create(request):
     serializer = WishModelSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(user=request.user)
     return Response(serializer.data)
 
 
