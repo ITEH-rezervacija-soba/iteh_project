@@ -94,4 +94,3 @@ def hotel_page(request, pk):
             return redirect('room_reservation/home.html')
     context = {"form": form, "hotel": hotel, "images": images, "rooms": rooms}
     return render(request, 'room_reservation/hotel_page.html', context)
-

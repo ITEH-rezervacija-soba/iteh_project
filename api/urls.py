@@ -12,6 +12,6 @@ urlpatterns = [
     path('wish-list/', wish_list, name="wish_list"),
     path('wish-detail/<str:pk>/', wish_detail, name="wish_detail"),
     path('wish-create/', wish_create, name="wish_create"),
-    path('wish-update/<str:pk>', wish_update, name="wish_update"),
-    path('wish-delete/<str:pk>', wish_delete, name="wish_delete"),
+    path('wish-update/<str:pk>/', wish_update, name="wish_update"),
+    path('wish-delete/<str:pk>/', wish_delete, name="wish_delete"),
 ]

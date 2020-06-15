@@ -18,7 +18,7 @@ def api_overview(request):
 
 @api_view(['GET'])
 def wish_list(request):
-    wishes = WishModel.objects.all()
+    wishes = WishModel.objects.all().order_by('-id')
     serializer = WishModelSerializer(wishes, many=True)
     return Response(serializer.data)
 
@@ -40,8 +40,8 @@ def wish_create(request):
 
 @api_view(['POST'])
 def wish_update(request, pk):
-    wishes = WishModel.objects.get(id=pk)
-    serializer = WishModelSerializer(instance=wishes, data=request.data)
+    wish = WishModel.objects.get(id=pk)
+    serializer = WishModelSerializer(instance=wish, data=request.data)
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
@@ -49,7 +49,7 @@ def wish_update(request, pk):
 
 @api_view(['DELETE'])
 def wish_delete(request, pk):
-    wishes = WishModel.objects.get(id=pk)
-    wishes.delete()
-    return Response()
+    wish = WishModel.objects.get(id=pk)
+    wish.delete()
+    return Response('Item successfully deleted!')
 
