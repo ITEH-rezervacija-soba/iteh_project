@@ -86,6 +86,7 @@ def hotel_page(request, pk):
     images = HotelImageModel.objects.filter(hotel=pk)
     rooms = AccommodationModel.objects.filter(hotel=pk)
 
+    #WEB SERVIS ZA KONVERZIJU VALUTA
     url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP"
     response = requests.get(url)
     data = response.text
