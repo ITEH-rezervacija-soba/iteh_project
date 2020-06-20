@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from .views import login_user, homepage, register, logout_user, user_profile, hotels, hotel_page, create_reservation
+from .views import login_user, homepage, register, logout_user, user_profile, hotels, hotel_page, create_reservation,weather
 
 
 urlpatterns = [
@@ -17,5 +17,6 @@ urlpatterns = [
     path('hotels/', hotels, name='hotels'),
     path('hotels/<int:pk>/', hotel_page, name="hotel_page"),
     path('create_reservation/', create_reservation, name="create_reservation"),
+    path('weather/', weather, name='weather')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

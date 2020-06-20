@@ -102,12 +102,6 @@ def hotel_page(request, pk):
 
 def create_reservation(request):
 
-    # # Where USD is the base currency you want to use
-    # url = 'https://prime.exchangerate-api.com/v5/803d1fbd08bdf284a1b23ac8/latest/USD'
-    #
-    # # Making our request
-    # response = requests.get(url)
-    # data = response.json()
 
     form = CreateReservationForm()
     if request.method == "POST":
@@ -127,3 +121,18 @@ def create_reservation(request):
     return render(request, 'room_reservation/create_reservation.html', context)
 
 
+def weather(request):
+
+    # WEB SERVIS ZA PRETRAGU MESTA DESAVANJA
+
+    data = requests.get("http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('London','1cf038b92a748c3271a76ede2fcd7f0c','metric'))
+
+    data_json = data.json()
+
+
+    context = {"data":data_json}
+    return render(request, 'room_reservation/weather.html', context)
+
+# -ogranicenja za rezervacije
+# -prikaz rezervacije
+# -izmena,  otkazivanje
