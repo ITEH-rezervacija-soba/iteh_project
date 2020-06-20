@@ -10,7 +10,7 @@ from .forms import CreateUserForm, CreateReservationForm
 from .models import HotelModel, AccommodationModel, HotelImageModel
 
 from datetime import date
-
+import requests, json
 
 @csrf_protect
 def login_user(request):
@@ -82,15 +82,47 @@ def hotels(request):
 
 
 def hotel_page(request, pk):
-    form = CreateReservationForm()
     hotel = HotelModel.objects.get(id=pk)
     images = HotelImageModel.objects.filter(hotel=pk)
     rooms = AccommodationModel.objects.filter(hotel=pk)
-    if request.method == 'POST':
-        form = CreateReservationForm(request.POST, initial={"user": request.user, "accommodation": pk,
-                                                            "reservation_date": date.today(), })
-        if form.is_valid():
-            form.save()
-            return redirect('room_reservation/home.html')
-    context = {"form": form, "hotel": hotel, "images": images, "rooms": rooms}
+
+    url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP"
+    response = requests.get(url)
+    data = response.text
+    parsed = json.loads(data)
+
+    base = parsed['base']
+    other_currencies = list(parsed['rates'])
+    curr_vals = list(parsed["rates"].values())
+    form_list = zip(other_currencies, curr_vals)
+    context = {"hotel": hotel, "images": images, "rooms": rooms, "base": base, "form_list": form_list}
     return render(request, 'room_reservation/hotel_page.html', context)
+
+
+def create_reservation(request):
+
+    # # Where USD is the base currency you want to use
+    # url = 'https://prime.exchangerate-api.com/v5/803d1fbd08bdf284a1b23ac8/latest/USD'
+    #
+    # # Making our request
+    # response = requests.get(url)
+    # data = response.json()
+
+    form = CreateReservationForm()
+    if request.method == "POST":
+        form = CreateReservationForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.reservation_date = date.today()
+            obj.total_price = obj.accommodation.price_per_night * int((obj.end_date - obj.start_date).days)
+            obj.save()
+            return redirect('homepage')
+        else:
+            messages.info(request, "You have to fill all the fields to make a reservation."
+                                   " Date format is DD.MM.YYYY.")
+
+    context = {"form": form}
+    return render(request, 'room_reservation/create_reservation.html', context)
+
+

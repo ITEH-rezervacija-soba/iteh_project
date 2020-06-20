@@ -1,0 +1,16 @@
+{% include 'room_reservation/base.html' %}
+{% load static %}
+{% block content %}
+
+    <form action="" method="POST">
+    {% csrf_token %}
+        {{ form }}
+        <input type="submit" name="Submit">
+    </form>
+
+
+
+    {% for message in messages %}
+            <p>  {{ message }} </p>
+        {% endfor %}
+{% endblock %}

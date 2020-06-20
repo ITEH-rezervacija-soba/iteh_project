@@ -1,7 +1,7 @@
 {% include 'room_reservation/base.html' %}
 {% load static %}
 {% block content %}
-
+{% endblock %}
     <div class="hotels_div">
         <h1> {{ hotel.hotel_name }}</h1>
         <h>{{ hotel.address}}, {{ hotel.city_name }}</h>
@@ -37,48 +37,52 @@
     </div>
     </div>
 
+
     <div class ="rooms">
         <table style="width:100%">
             <tr>
                 <th>Room Type</th>
                 <th>Number of Guests</th>
                 <th>Price for a night</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Number of rooms</th>
+                <th>Currency</th>
                 <th></th>
             </tr>
             {% for room in rooms %}
             <tr>
-                <form method="POST">
+            <form method="POST">
                     {% csrf_token %}
-                    {{form}}
                     <td>{{room.accommodation_name}}</td>
                     <td>{{room.number_of_beds}}</td>
-                    <td>{{ room.price_per_night }}</td>
+                    <td id="price">{{ room.price_per_night }}</td>
                     <td>
-                        <input type="date" id="datum" name="start_date"
-                            value="2021-01-01" min="2020-01-01" max="2025-12-31">
-                    </td>
-                    <td>
-                        <input type="date" id="datum" name="end_date"
-                            value="2021-01-01" min="2020-01-01" max="2025-12-31">
-                    </td>
-                    <td>
-                    <select id="amount" name="amount">
-                        <option value=1>1</option>
-                        <option value=2>2</option>
-                        <option value=3>3</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
+                        <select id="currencies" name="currencies" class="form-control">
+                        <option value=1 selected>{{ base }}</option>
+                         {% for curr,val in form_list %}
+                            <option id="{{ curr }}" value="{{ val }}">
+                                {{ curr}}
+                            </option>
+                        {% endfor %}
                     </select>
                     </td>
-                    <td><input type="submit" value = "Reserve" name="Reserve"></td>
-                </form>
+                    {% block javascript %}
+                        <script>
+                            $(document).ready(function () {
+                            $("#currencies").change(function(){
+                                var coef = $("#currencies").val();
+                                var new_price = coef*{{ room.price_per_night }}
+                                $("#price").html(new_price.toFixed(2))
+                            });
+                            });
+
+                        </script>
+                    {% endblock %}
+                    <td><a class = "btn btn-sm btn-info" href = "{% url 'create_reservation' %}">Reserve</a></td>
+            </form>
             </tr>
             {% endfor %}
         </table>
     </div>
 
+    <script>
 
-{% endblock %}
+    </script>
