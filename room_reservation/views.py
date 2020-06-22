@@ -109,17 +109,17 @@ def hotel_page(request, pk):
     images = HotelImageModel.objects.filter(hotel=pk)
     rooms = AccommodationModel.objects.filter(hotel=pk)
 
-    #WEB SERVIS ZA KONVERZIJU VALUTA
+    # WEB SERVIS ZA KONVERZIJU VALUTA
     url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP"
     response = requests.get(url)
     data = response.text
     parsed = json.loads(data)
 
     base = parsed['base']
-    other_currencies = list(parsed['rates'])
-    curr_vals = list(parsed["rates"].values())
-    form_list = zip(other_currencies, curr_vals)
-    context = {"hotel": hotel, "images": images, "rooms": rooms, "base": base, "form_list": form_list}
+    currencies = [base] + list(parsed['rates'])
+    curr_vals = [1] + list(parsed["rates"].values())
+    form_list = zip(currencies, curr_vals)
+    context = {"hotel": hotel, "images": images, "rooms": rooms, "form_list": form_list}
     return render(request, 'room_reservation/hotel_page.html', context)
 
 

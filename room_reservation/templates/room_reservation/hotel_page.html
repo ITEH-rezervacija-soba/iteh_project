@@ -53,22 +53,21 @@
                     {% csrf_token %}
                     <td>{{room.accommodation_name}}</td>
                     <td>{{room.number_of_beds}}</td>
-                    <td id="price">{{ room.price_per_night }}</td>
+                    <td id="price_{{ room.id }}">{{ room.price_per_night }}</td>
                     <td>
-                        <select id="currencies" name="currencies" class="form-control">
-                        <option value=1 selected>{{ base }}</option>
+                        <select id="currencies_{{ room.id }}" name="currencies" class="form-control">
                          {% for curr,val in form_list %}
                             <option value={{ val }}>{{ curr}}</option>
                          {% endfor %}
-                    </select>
+                        </select>
                     </td>
                     {% block javascript %}
                         <script>
                             $(document).ready(function () {
-                            $("#currencies").change(function(){
-                                var coef = $("#currencies").val();
-                                var new_price = coef*{{ room.price_per_night }}
-                                $("#price").html(new_price.toFixed(2))
+                            $("#currencies_".concat({{ room.id }})).change(function(){
+                                var coef = parseFloat($("#currencies_".concat({{ room.id }})).val());
+                                var new_price = coef * parseFloat({{ room.price_per_night }});
+                                $("#price_".concat({{ room.id }})).html(new_price);
                             });
                             });
 
