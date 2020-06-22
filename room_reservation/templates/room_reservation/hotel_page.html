@@ -56,9 +56,9 @@
                     <td id="price_{{ room.id }}">{{ room.price_per_night }}</td>
                     <td>
                         <select id="currencies_{{ room.id }}" name="currencies" class="form-control">
-                         {% for curr,val in form_list %}
-                            <option value={{ val }}>{{ curr}}</option>
-                         {% endfor %}
+                            <option value={{ values.0 }}>{{ currencies.0}}</option>
+                            <option value={{ values.1 }}>{{ currencies.1}}</option>
+                            <option value={{ values.2 }}>{{ currencies.2}}</option>
                         </select>
                     </td>
                     {% block javascript %}
@@ -67,7 +67,7 @@
                             $("#currencies_".concat({{ room.id }})).change(function(){
                                 var coef = parseFloat($("#currencies_".concat({{ room.id }})).val());
                                 var new_price = coef * parseFloat({{ room.price_per_night }});
-                                $("#price_".concat({{ room.id }})).html(new_price);
+                                $("#price_".concat({{ room.id }})).html(new_price.toFixed(2));
                             });
                             });
 

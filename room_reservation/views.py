@@ -39,7 +39,6 @@ def homepage(request):
     base = parsed['base']
     currencies = [base] + list(parsed['rates'])
     curr_vals = [1] + list(parsed["rates"].values())
-    form_list = zip(currencies, curr_vals)
 
     reservations = ReservationModel.objects.filter(user=request.user)
     for res in reservations:
@@ -51,7 +50,7 @@ def homepage(request):
             res.status = f'Checked out {res.end_date.strftime("%d.%m.%Y.")}'
         else:
             res.status = f'Checked in {res.start_date.strftime("%d.%m.%Y.")}'
-    context = {"reservations":reservations, "form_list": form_list}
+    context = {"reservations":reservations, "values": curr_vals,"currencies": currencies}
     return render(request, 'room_reservation/home.html',context)
 
 
@@ -118,8 +117,8 @@ def hotel_page(request, pk):
     base = parsed['base']
     currencies = [base] + list(parsed['rates'])
     curr_vals = [1] + list(parsed["rates"].values())
-    form_list = zip(currencies, curr_vals)
-    context = {"hotel": hotel, "images": images, "rooms": rooms, "form_list": form_list}
+
+    context = {"hotel": hotel, "images": images, "rooms": rooms, "currencies": currencies, "values": curr_vals}
     return render(request, 'room_reservation/hotel_page.html', context)
 
 
