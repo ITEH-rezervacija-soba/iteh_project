@@ -4,7 +4,8 @@ from django.forms import ModelForm, DateField, DateInput
 from pylint.checkers.typecheck import _
 
 from .models import ReservationModel
-
+from datetime import date
+TIME_FORMAT = '%d.%m.%Y'
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -14,8 +15,8 @@ class CreateUserForm(UserCreationForm):
 
 class CreateReservationForm(ModelForm):
 
-    start_date = DateField(input_formats=["%d.%m.%Y."])
-    end_date = DateField(input_formats=["%d.%m.%Y."])
+    start_date = DateField(input_formats=[TIME_FORMAT])
+    end_date = DateField(input_formats=[TIME_FORMAT])
 
     class Meta:
         model = ReservationModel

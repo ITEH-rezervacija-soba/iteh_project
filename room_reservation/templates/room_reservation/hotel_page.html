@@ -58,10 +58,8 @@
                         <select id="currencies" name="currencies" class="form-control">
                         <option value=1 selected>{{ base }}</option>
                          {% for curr,val in form_list %}
-                            <option id="{{ curr }}" value="{{ val }}">
-                                {{ curr}}
-                            </option>
-                        {% endfor %}
+                            <option value={{ val }}>{{ curr}}</option>
+                         {% endfor %}
                     </select>
                     </td>
                     {% block javascript %}
@@ -76,7 +74,7 @@
 
                         </script>
                     {% endblock %}
-                    <td><a class = "btn btn-sm btn-info" href = "{% url 'create_reservation' %}">Reserve</a></td>
+                    <td><a class = "btn btn-sm btn-info" href = "{% url 'create_reservation' room.id %}">Reserve</a></td>
             </form>
             </tr>
             {% endfor %}

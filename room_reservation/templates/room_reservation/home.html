@@ -1,4 +1,60 @@
 {% include 'room_reservation/base.html' %}
 {% block content %}
 {% load static %}
+
+
+    <div class="col-md-7">
+		<h5>RESERVATIONS</h5>
+		<hr>
+		<div class="card card-body">
+
+			<table class="table table-sm">
+				<tr>
+                    <th>Status</th>
+					<th>Hotel</th>
+					<th>Room </th>
+					<th>Price</th>
+                    <th>Currency</th>
+                    <th>Edit</th>
+					<th>Cancel</th>
+                    <th>Pdf document</th>
+				</tr>
+                {% for res in reservations %}
+                    <tr>
+                        <td>{{ res.status }}</td>
+					    <td>{{ res.hotel }}</td>
+					    <td>{{ res.accommodation }} </td>
+					    <td id="total_price_{{ res.id }}">{{ res.total_price }}</td>
+                        <td>
+                            <select id="currencies_{{ res.id }}" name="currencies" class="form-control">
+                                {% for curr,val in form_list %}
+                                    <option value={{ val }}>{{ val}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><a class = "btn btn-sm btn-info" href="{% url "update_reservation" res.id %}">Edit</a></td>
+					    <td><a class = "btn btn-sm btn-info" href="{% url "delete_reservation" res.id %}">Delete</a></td>
+                        <td><button class = "btn btn-sm btn-outline-dark pdf">Get pdf</button></td>
+                        <script>change({{ res }})</script>
+				    </tr>
+
+                {% endfor %}
+			</table>
+    {% block javascript %}
+                        <script>
+                        function change(res){
+                            $(document).ready(function () {
+                            $("#currencies_".concat({{res.id}})).change(function(){
+                                var coef = parseFloat($("#currencies_".concat({{ res.id }})).val());
+                                var new_price = coef * parseFloat({{ res.total_price }});
+                                $("#total_price_".concat({{ res.id }})).html(new_price);
+                            });
+                            });
+                        }
+
+                        </script>
+                    {% endblock %}
+		</div>
+	</div>
+
 {% endblock %}

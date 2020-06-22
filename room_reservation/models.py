@@ -11,7 +11,8 @@ class HotelModel(models.Model):
     category = models.CharField(max_length=255, blank=False)
     hotel_image = models.ImageField(upload_to='hotels')
     hotel_description = models.TextField(default="")
-
+    def __str__(self):
+        return str(self.hotel_name) + " " + str(self.category)
 
 BED_CHOICES = [
     (1, 'One'),
@@ -48,5 +49,7 @@ class ReservationModel(models.Model):
     end_date = models.DateField()
     total_price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
 
+    def __str__(self):
+        return str(self.accommodation) + " " + str(self.reservation_date.strftime('%d.%m.%Y'))
 
 
