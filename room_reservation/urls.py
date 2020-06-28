@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+from . import views
 from .views import login_user, homepage, register, logout_user, user_profile, hotels, hotel_page, create_reservation, weather, update_reservation, delete_reservation
 
 
@@ -19,6 +20,7 @@ urlpatterns = [
     path('create_reservation/<int:pk>/', create_reservation, name="create_reservation"),
     path('update_reservation/<int:pk>/', update_reservation, name="update_reservation"),
     path('delete_reservation/<int:pk>/', delete_reservation, name="delete_reservation"),
-    path('weather/', weather, name='weather')
+    path('weather/', weather, name='weather'),
+    path('pdf_view/<int:pk>', views.view_as_pdf, name="view_as_pdf"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

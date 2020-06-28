@@ -7,6 +7,7 @@ from .models import ReservationModel
 from datetime import date
 TIME_FORMAT = '%d.%m.%Y'
 
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User

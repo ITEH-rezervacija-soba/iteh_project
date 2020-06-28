@@ -1,26 +1,30 @@
 {% include 'room_reservation/base.html' %}
 {% block content %}
 
-    <br>
-    <form method="GET">
+    <p style="color: #3D405B;
+    text-align: left;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 0;"> Look for a hotel</p>
+    <form method="GET" class="res_form">
     {{my_filter.form}}
-    <button type="submit">Search</button>
+    <button type="submit" id="submit" style="position: relative">Search</button>
     </form>
     <br>
 
     {% for hotel in hotels %}
 
     <div class="hotel_card">
-    <div class="card mb-3" style="max-width: 1080px;">
+    <div class="card mb-3" style="max-width: 1240px; height: 310px">
       <div class="row no-gutters">
         <div class="col-md-4">
-          <img src="{{ hotel.hotel_image.url }}" class="card-img" alt="Hotel image">
+          <img src="{{ hotel.hotel_image.url }}" class="card-img, hotel_img" alt="Hotel image">
         </div>
         <div class="col-md-8">
           <div class="card-body">
-            <h5 class="card-title"><a href="{% url 'hotel_page' hotel.id %}"> {{ hotel.hotel_name }} </a></h5>
-            <p class="card-text">  {{ hotel.address}}, {{ hotel.city_name }} </p>
-            <p class="card-text"><small class="text-muted"> {{ hotel.hotel_description }} </small></p>
+            <h5 class="card-title"><a href="{% url 'hotel_page' hotel.id %}" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%"> {{ hotel.hotel_name }} </a></h5>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" >  {{ hotel.address}}, {{ hotel.city_name }} </p>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" ><small class="text-muted"> {{ hotel.hotel_description }} </small></p>
           </div>
         </div>
       </div>
@@ -29,6 +33,7 @@
 
     {% endfor %}
 
+    <div class="pag_div">
     <div class="paginator">
     {% for num in hotels.paginator.page_range %}
         {% if hotels.number == num %}
@@ -38,5 +43,7 @@
         {% endif %}
     {% endfor %}
     </div>
+    </div>
 
 {% endblock %}
+

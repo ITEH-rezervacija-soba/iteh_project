@@ -4,14 +4,21 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.views import View
+from xhtml2pdf import pisa
 
-from .filters import HotelFilter
+from .filters import HotelFilter, ReservationFilter, AccomodationFilter
 from .forms import CreateUserForm, CreateReservationForm
 from .models import HotelModel, AccommodationModel, HotelImageModel, ReservationModel
 
 from datetime import date
+
 TIME_FORMAT = '%d.%m.%Y'
 import requests, json
+
 
 @csrf_protect
 def login_user(request):
@@ -30,28 +37,7 @@ def login_user(request):
 
 
 def homepage(request):
-    # WEB SERVIS ZA KONVERZIJU VALUTA
-    url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP"
-    response = requests.get(url)
-    data = response.text
-    parsed = json.loads(data)
-
-    base = parsed['base']
-    currencies = [base] + list(parsed['rates'])
-    curr_vals = [1] + list(parsed["rates"].values())
-
-    reservations = ReservationModel.objects.filter(user=request.user)
-    for res in reservations:
-        hotel = AccommodationModel.objects.get(id=res.accommodation.id).hotel
-        res.hotel = HotelModel.objects.get(id=hotel.id)
-        if res.start_date > date.today():
-            res.status = f'Pending - start date: {res.start_date.strftime("%d.%m.%Y.")}'
-        elif res.end_date < date.today():
-            res.status = f'Checked out {res.end_date.strftime("%d.%m.%Y.")}'
-        else:
-            res.status = f'Checked in {res.start_date.strftime("%d.%m.%Y.")}'
-    context = {"reservations":reservations, "values": curr_vals,"currencies": currencies}
-    return render(request, 'room_reservation/home.html',context)
+    return render(request, 'room_reservation/home.html')
 
 
 @csrf_protect
@@ -87,7 +73,32 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def user_profile(request):
-    return render(request, 'room_reservation/profile.html')
+    # WEB SERVIS ZA KONVERZIJU VALUTA
+    url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP"
+    response = requests.get(url)
+    data = response.text
+    parsed = json.loads(data)
+
+    base = parsed['base']
+    currencies = [base] + list(parsed['rates'])
+    curr_vals = [1] + list(parsed["rates"].values())
+
+    reservations = ReservationModel.objects.filter(user=request.user)
+    my_filter = ReservationFilter(request.GET, queryset=reservations)
+    reservations = my_filter.qs
+    for res in reservations:
+        hotel = AccommodationModel.objects.get(id=res.accommodation.id).hotel
+        res.hotel = HotelModel.objects.get(id=hotel.id)
+        if res.start_date > date.today():
+            res.status = f'Pending - start date: {res.start_date.strftime("%d.%m.%Y.")}'
+        elif res.end_date < date.today():
+            res.status = f'Checked out {res.end_date.strftime("%d.%m.%Y.")}'
+        else:
+            res.status = f'Checked in {res.start_date.strftime("%d.%m.%Y.")}'
+    current_user = request.user
+    context = {"reservations": reservations, "values": curr_vals, "currencies": currencies,
+               "current_user": current_user, "my_filter": my_filter}
+    return render(request, 'room_reservation/profile.html', context)
 
 
 def hotels(request):
@@ -107,6 +118,8 @@ def hotel_page(request, pk):
     hotel = HotelModel.objects.get(id=pk)
     images = HotelImageModel.objects.filter(hotel=pk)
     rooms = AccommodationModel.objects.filter(hotel=pk)
+    my_filter = AccomodationFilter(request.GET, queryset=rooms)
+    rooms = my_filter.qs
 
     # WEB SERVIS ZA KONVERZIJU VALUTA
     url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP"
@@ -118,32 +131,35 @@ def hotel_page(request, pk):
     currencies = [base] + list(parsed['rates'])
     curr_vals = [1] + list(parsed["rates"].values())
 
-    context = {"hotel": hotel, "images": images, "rooms": rooms, "currencies": currencies, "values": curr_vals}
+    context = {"hotel": hotel, "images": images, "rooms": rooms, "currencies": currencies, "values": curr_vals,
+               "my_filter": my_filter}
     return render(request, 'room_reservation/hotel_page.html', context)
 
 
-def create_reservation(request,pk):
-    acc = AccommodationModel.objects.get(id = pk)
+def create_reservation(request, pk):
+    acc = AccommodationModel.objects.get(id=pk)
     obj = ReservationModel(accommodation_id=acc.id)
-    form = CreateReservationForm(instance = obj)
+    form = CreateReservationForm(instance=obj)
     if request.method == "POST":
         form = CreateReservationForm(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
             if obj.start_date < date.today():
                 messages.info(request, "Start date can not be in the past")
-                return redirect('create_reservation',pk=pk)
+                return redirect('create_reservation', pk=pk)
             reservations = ReservationModel.objects.filter(accommodation=obj.accommodation)
             for res in reservations:
-                if ((res.start_date >= obj.start_date) & (res.start_date <= obj.end_date)) | ((res.end_date >= obj.start_date) & (res.end_date <= obj.end_date)) | ((res.start_date <= obj.start_date) & (obj.end_date <= res.end_date)):
+                if ((res.start_date >= obj.start_date) & (res.start_date <= obj.end_date)) | (
+                        (res.end_date >= obj.start_date) & (res.end_date <= obj.end_date)) | (
+                        (res.start_date <= obj.start_date) & (obj.end_date <= res.end_date)):
                     messages.info(request, "Room is already booked for this dates")
-                    return redirect('create_reservation',pk=pk)
+                    return redirect('create_reservation', pk=pk)
             obj.user = request.user
             obj.reservation_date = date.today()
             obj.total_price = obj.accommodation.price_per_night * int((obj.end_date - obj.start_date).days)
             if obj.total_price < 0:
                 messages.info(request, "Start date has to be before end date!")
-                return redirect('create_reservation',pk=pk)
+                return redirect('create_reservation', pk=pk)
             obj.save()
             return redirect('homepage')
         else:
@@ -153,12 +169,13 @@ def create_reservation(request,pk):
     context = {"form": form}
     return render(request, 'room_reservation/reservation.html', context)
 
-def update_reservation(request,pk):
 
+def update_reservation(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
 
-    form = CreateReservationForm(instance = reservation,initial={'start_date':reservation.start_date.strftime(TIME_FORMAT),
-                                                                 'end_date':reservation.end_date.strftime(TIME_FORMAT)})
+    form = CreateReservationForm(instance=reservation,
+                                 initial={'start_date': reservation.start_date.strftime(TIME_FORMAT),
+                                          'end_date': reservation.end_date.strftime(TIME_FORMAT)})
 
     if request.method == "POST":
         form = CreateReservationForm(request.POST, instance=reservation)
@@ -166,17 +183,17 @@ def update_reservation(request,pk):
             obj = form.save(commit=False)
             if obj.start_date < date.today():
                 messages.info(request, "Start date can not be in the past")
-                return redirect('update_reservation',pk = reservation.id)
+                return redirect('update_reservation', pk=reservation.id)
             if obj.start_date > obj.end_date:
                 messages.info(request, "Start date has to be before end date!")
-                return redirect('update_reservation',pk = reservation.id)
+                return redirect('update_reservation', pk=reservation.id)
             reservations = ReservationModel.objects.filter(accommodation=obj.accommodation).exclude(id=pk)
             for res in reservations:
                 if ((res.start_date >= obj.start_date) & (res.start_date <= obj.end_date)) | (
                         (res.end_date >= obj.start_date) & (res.end_date <= obj.end_date)) | (
                         (res.start_date <= obj.start_date) & (obj.end_date <= res.end_date)):
                     messages.info(request, "Room is already booked for this dates")
-                    return redirect('update_reservation',pk = reservation.id)
+                    return redirect('update_reservation', pk=reservation.id)
             obj.user = request.user
             obj.reservation_date = date.today()
             obj.total_price = obj.accommodation.price_per_night * int((obj.end_date - obj.start_date).days)
@@ -186,29 +203,52 @@ def update_reservation(request,pk):
             messages.info(request, "You have to fill all the fields to make a reservation."
                                    " Date format is DD.MM.YYYY.")
 
-    context = {"form":form}
+    context = {"form": form}
     return render(request, 'room_reservation/reservation.html', context)
 
-def delete_reservation(request,pk):
+
+def delete_reservation(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
     message = f"Are you sure you want to cancel reservation {reservation}?" if reservation.start_date > date.today() else f"Are you sure you want to remove reservation {reservation} from the list?"
     if request.method == "POST":
         reservation.delete()
         return redirect('homepage')
-    context = {"message":message,"reservation":reservation}
-    return  render(request, 'room_reservation/delete_reservation.html',context)
+    context = {"message": message, "reservation": reservation}
+    return render(request, 'room_reservation/delete_reservation.html', context)
+
 
 def weather(request):
+    # Web service za vreme, prikazuje trenunto samo London u json formatu
 
-    #Web service za vreme, prikazuje trenunto samo London u json formatu
-
-    data = requests.get("http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('London','1cf038b92a748c3271a76ede2fcd7f0c','metric'))
+    data = requests.get("http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('London',
+                                                                                                          '1cf038b92a748c3271a76ede2fcd7f0c',
+                                                                                                          'metric'))
 
     data_json = data.json()
 
-
-    context = {"data":data_json}
+    context = {"data": data_json}
     return render(request, 'room_reservation/weather.html', context)
 
 
 # -izmena,  otkazivanje
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+
+
+@login_required(login_url='login')
+def view_as_pdf(request, pk):
+    current_user = request.user
+    reservation = ReservationModel.objects.get(id=pk)
+    accommodation = AccommodationModel.objects.get(id=reservation.accommodation.id)
+    hotel = HotelModel.objects.get(id=accommodation.hotel.id)
+    total_days = reservation.end_date-reservation.start_date
+    context = {"user": current_user, "reservation": reservation, "accommodation": accommodation, "hotel": hotel, "total_days":total_days}
+    pdf = render_to_pdf('room_reservation/pdf_template.html', context)
+    return HttpResponse(pdf, content_type='application/pdf')

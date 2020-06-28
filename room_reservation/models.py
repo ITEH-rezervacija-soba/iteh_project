@@ -33,7 +33,7 @@ class AccommodationModel(models.Model):
     price_per_night = models.DecimalField(decimal_places=2, max_digits=10)
 
     def __str__(self):
-        return str(self.accommodation_name) + " " + str(self.price_per_night)
+        return str(self.accommodation_name) + ", " + str(self.price_per_night) + " eur. per night"
 
 
 class HotelImageModel(models.Model):
