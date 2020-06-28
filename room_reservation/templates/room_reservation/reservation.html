@@ -2,6 +2,22 @@
 {% load static %}
 {% block content %}
 
+      <div class="hotel_card">
+    <div class="card mb-3" style="max-width: 1240px; height: 310px">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{{ hotel.hotel_image.url }}" class="card-img, hotel_img" alt="Hotel image">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'hotel_page' hotel.id %}" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%"> {{ hotel.hotel_name }} </a></h5>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" > <i class="fas fa-map-marker-alt"></i>  {{ hotel.address}}, {{ hotel.city_name }} </p>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" ><small class="text-muted"> {{ hotel.hotel_description }} </small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
     <form action="" method="POST">
     {% csrf_token %}
         {{ form }}

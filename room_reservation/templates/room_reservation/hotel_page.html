@@ -67,9 +67,9 @@
             <tr>
             <form method="POST">
                     {% csrf_token %}
-                    <td>{{room.accommodation_name}}</td>
-                    <td>{{room.number_of_beds}}</td>
-                    <td id="price_{{ room.id }}">{{ room.price_per_night }}</td>
+                    <td> <i class="fas fa-hotel"></i> {{room.accommodation_name}}</td>
+                    <td>{{room.number_of_beds}}  <i class="fas fa-bed"></i> </td>
+                    <td id="price_{{ room.id }}"> {{ room.price_per_night }} <i class="fas fa-money-bill-wave"></i></td>
                     <td>
                         <select id="currencies_{{ room.id }}" name="currencies" class="form-control">
                             <option value={{ values.0 }}>{{ currencies.0}}</option>
@@ -96,5 +96,7 @@
         </table>
     </div>
 </div>
-
+    <footer style="background: #3D405B;height: 40px; text-align: center; color: black; padding-top: 5px;position: relative">
+       © 2020 Copyright: MAS.com
+    </footer>
 {% endblock %}

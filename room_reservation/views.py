@@ -1,3 +1,4 @@
+import requests, json
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
@@ -17,7 +18,6 @@ from .models import HotelModel, AccommodationModel, HotelImageModel, Reservation
 from datetime import date
 
 TIME_FORMAT = '%d.%m.%Y'
-import requests, json
 
 
 @csrf_protect
@@ -37,7 +37,46 @@ def login_user(request):
 
 
 def homepage(request):
-    return render(request, 'room_reservation/home.html')
+    london_data = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('London',
+                                                                                          '1cf038b92a748c3271a76ede2fcd7f0c',
+                                                                                          'metric'))
+
+    london_json = london_data.json()
+    london_temp = london_json['main']['temp']
+    london_temp_min = london_json['main']['temp_min']
+    london_temp_max = london_json['main']['temp_max']
+    london_humidity = london_json['main']['humidity']
+    london = {'temp': london_temp, 'temp_min': london_temp_min, 'temp_max': london_temp_max,
+              'humidity': london_humidity}
+
+    belgrade_data = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('Belgrade',
+                                                                                          '1cf038b92a748c3271a76ede2fcd7f0c',
+                                                                                          'metric'))
+
+    belgrade_json = belgrade_data.json()
+    belgrade_temp = belgrade_json['main']['temp']
+    belgrade_temp_min = belgrade_json['main']['temp_min']
+    belgrade_temp_max = belgrade_json['main']['temp_max']
+    belgrade_humidity = belgrade_json['main']['humidity']
+    belgrade = {'temp': belgrade_temp, 'temp_min': belgrade_temp_min, 'temp_max': belgrade_temp_max,
+                'humidity': belgrade_humidity}
+
+    paris_data = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('Paris',
+                                                                                          '1cf038b92a748c3271a76ede2fcd7f0c',
+                                                                                          'metric'))
+
+    paris_json = paris_data.json()
+    paris_temp = paris_json['main']['temp']
+    paris_temp_min = paris_json['main']['temp_min']
+    paris_temp_max = paris_json['main']['temp_max']
+    paris_humidity = paris_json['main']['humidity']
+    paris = {'temp': paris_temp, 'temp_min': paris_temp_min, 'temp_max': paris_temp_max, 'humidity': paris_humidity}
+
+    context = {'london': london, 'belgrade': belgrade, 'paris': paris}
+    return render(request, 'room_reservation/home.html', context)
 
 
 @csrf_protect
@@ -136,8 +175,10 @@ def hotel_page(request, pk):
     return render(request, 'room_reservation/hotel_page.html', context)
 
 
+@login_required(login_url='login')
 def create_reservation(request, pk):
     acc = AccommodationModel.objects.get(id=pk)
+    hotel = HotelModel.objects.get(id=acc.hotel.id)
     obj = ReservationModel(accommodation_id=acc.id)
     form = CreateReservationForm(instance=obj)
     if request.method == "POST":
@@ -166,10 +207,11 @@ def create_reservation(request, pk):
             messages.info(request, "You have to fill all the fields to make a reservation."
                                    " Date format is DD.MM.YYYY")
 
-    context = {"form": form}
+    context = {"form": form, "acc": acc, "hotel": hotel}
     return render(request, 'room_reservation/reservation.html', context)
 
 
+@login_required(login_url='login')
 def update_reservation(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
 
@@ -207,6 +249,7 @@ def update_reservation(request, pk):
     return render(request, 'room_reservation/reservation.html', context)
 
 
+@login_required(login_url='login')
 def delete_reservation(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
     message = f"Are you sure you want to cancel reservation {reservation}?" if reservation.start_date > date.today() else f"Are you sure you want to remove reservation {reservation} from the list?"
@@ -216,21 +259,6 @@ def delete_reservation(request, pk):
     context = {"message": message, "reservation": reservation}
     return render(request, 'room_reservation/delete_reservation.html', context)
 
-
-def weather(request):
-    # Web service za vreme, prikazuje trenunto samo London u json formatu
-
-    data = requests.get("http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('London',
-                                                                                                          '1cf038b92a748c3271a76ede2fcd7f0c',
-                                                                                                          'metric'))
-
-    data_json = data.json()
-
-    context = {"data": data_json}
-    return render(request, 'room_reservation/weather.html', context)
-
-
-# -izmena,  otkazivanje
 
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -248,7 +276,8 @@ def view_as_pdf(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
     accommodation = AccommodationModel.objects.get(id=reservation.accommodation.id)
     hotel = HotelModel.objects.get(id=accommodation.hotel.id)
-    total_days = reservation.end_date-reservation.start_date
-    context = {"user": current_user, "reservation": reservation, "accommodation": accommodation, "hotel": hotel, "total_days":total_days}
+    total_days = reservation.end_date - reservation.start_date
+    context = {"user": current_user, "reservation": reservation, "accommodation": accommodation, "hotel": hotel,
+               "total_days": total_days}
     pdf = render_to_pdf('room_reservation/pdf_template.html', context)
     return HttpResponse(pdf, content_type='application/pdf')

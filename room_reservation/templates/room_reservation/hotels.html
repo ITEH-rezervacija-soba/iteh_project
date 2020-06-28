@@ -23,7 +23,7 @@
         <div class="col-md-8">
           <div class="card-body">
             <h5 class="card-title"><a href="{% url 'hotel_page' hotel.id %}" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%"> {{ hotel.hotel_name }} </a></h5>
-            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" >  {{ hotel.address}}, {{ hotel.city_name }} </p>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" > <i class="fas fa-map-marker-alt"></i>  {{ hotel.address}}, {{ hotel.city_name }} </p>
             <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" ><small class="text-muted"> {{ hotel.hotel_description }} </small></p>
           </div>
         </div>
@@ -44,6 +44,8 @@
     {% endfor %}
     </div>
     </div>
-
+    <footer style="background: #3D405B;height: 40px; text-align: center; color: black; padding-top: 5px;position: relative">
+       © 2020 Copyright: MAS.com
+    </footer>
 {% endblock %}
 
