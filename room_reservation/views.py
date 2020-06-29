@@ -1,3 +1,5 @@
+import urllib
+
 import requests, json
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout, login
@@ -37,6 +39,7 @@ def login_user(request):
 
 
 def homepage(request):
+    key = 'LQBJ8397PZR8L3UK'
     london_data = requests.get(
         "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('London',
                                                                                           '1cf038b92a748c3271a76ede2fcd7f0c',
@@ -50,6 +53,8 @@ def homepage(request):
     london = {'temp': london_temp, 'temp_min': london_temp_min, 'temp_max': london_temp_max,
               'humidity': london_humidity}
 
+    urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field1={london_temp}')
+
     belgrade_data = requests.get(
         "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('Belgrade',
                                                                                           '1cf038b92a748c3271a76ede2fcd7f0c',
@@ -62,6 +67,7 @@ def homepage(request):
     belgrade_humidity = belgrade_json['main']['humidity']
     belgrade = {'temp': belgrade_temp, 'temp_min': belgrade_temp_min, 'temp_max': belgrade_temp_max,
                 'humidity': belgrade_humidity}
+    urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field2={belgrade_temp}')
 
     paris_data = requests.get(
         "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('Paris',
@@ -74,6 +80,7 @@ def homepage(request):
     paris_temp_max = paris_json['main']['temp_max']
     paris_humidity = paris_json['main']['humidity']
     paris = {'temp': paris_temp, 'temp_min': paris_temp_min, 'temp_max': paris_temp_max, 'humidity': paris_humidity}
+    urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field3={paris_temp}')
 
     context = {'london': london, 'belgrade': belgrade, 'paris': paris}
     return render(request, 'room_reservation/home.html', context)
