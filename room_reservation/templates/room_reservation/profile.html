@@ -15,13 +15,14 @@
 
 </head>
 <body>
-   <br>
-        <form method="GET" class="res_form">
-            <div class="form-group">
+<br>
+<h1 class="main_heading"> {{ current_user.first_name }} {{ current_user.last_name }}'s reservations </h1>
+        <div class="form_div">
+        <form method="GET">
             {{my_filter.form}}
             <button type="submit" id="submit" style="position: relative">Search</button>
-            </div>
         </form>
+        </div>
     <br>
  <div id="res-container">
 		<div class="card card-body">
@@ -72,6 +73,7 @@
 		</div>
 	</div>
 <hr>
+   <h1 class="main_heading"> Make your own wish list</h1>
 <div class="container">
 
 		<div id="task-container">
@@ -79,8 +81,7 @@
 				<form id="form">
 					<div class="flex-wrapper">
 						<div style="flex: 6">
-							<input id="title" class="form-control" type="text" name="title"
-                                   placeholder="Add destination you wish to visit">
+							<input id="title" class="form-control" type="text" name="title" placeholder="Add destination you wish to visit">
 						</div>
 						<div style="flex: 1">
 							<input id="submit" class="btn" type="submit">
@@ -94,7 +95,7 @@
 		</div>
 
 	</div>
-   <footer style="background: #3D405B;height: 40px; text-align: center; color: black; padding-top: 5px;position: relative">
+   <footer>
        © 2020 Copyright: MAS.com
     </footer>
 

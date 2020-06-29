@@ -50,6 +50,6 @@ class ReservationModel(models.Model):
     total_price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
 
     def __str__(self):
-        return str(self.accommodation) + " " + str(self.reservation_date.strftime('%d.%m.%Y'))
+        return str(self.accommodation) + ", starting on  " + str(self.reservation_date.strftime('%d.%m.%Y'))+" (lasting "+str((self.end_date-self.start_date).days)+" days)"
 
 

@@ -202,7 +202,7 @@ def create_reservation(request, pk):
                 messages.info(request, "Start date has to be before end date!")
                 return redirect('create_reservation', pk=pk)
             obj.save()
-            return redirect('homepage')
+            return redirect('profile')
         else:
             messages.info(request, "You have to fill all the fields to make a reservation."
                                    " Date format is DD.MM.YYYY")
@@ -214,7 +214,9 @@ def create_reservation(request, pk):
 @login_required(login_url='login')
 def update_reservation(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
-
+    acc = AccommodationModel.objects.get(id=reservation.accommodation.id)
+    hotel = HotelModel.objects.get(id=acc.hotel.id)
+    obj = ReservationModel(accommodation_id=acc.id)
     form = CreateReservationForm(instance=reservation,
                                  initial={'start_date': reservation.start_date.strftime(TIME_FORMAT),
                                           'end_date': reservation.end_date.strftime(TIME_FORMAT)})
@@ -245,18 +247,20 @@ def update_reservation(request, pk):
             messages.info(request, "You have to fill all the fields to make a reservation."
                                    " Date format is DD.MM.YYYY.")
 
-    context = {"form": form}
+    context = {"form": form, "hotel": hotel}
     return render(request, 'room_reservation/reservation.html', context)
 
 
 @login_required(login_url='login')
 def delete_reservation(request, pk):
     reservation = ReservationModel.objects.get(id=pk)
+    acc = AccommodationModel.objects.get(id=reservation.accommodation.id)
+    hotel = HotelModel.objects.get(id=acc.hotel.id)
     message = f"Are you sure you want to cancel reservation {reservation}?" if reservation.start_date > date.today() else f"Are you sure you want to remove reservation {reservation} from the list?"
     if request.method == "POST":
         reservation.delete()
         return redirect('homepage')
-    context = {"message": message, "reservation": reservation}
+    context = {"message": message, "reservation": reservation, "hotel":hotel}
     return render(request, 'room_reservation/delete_reservation.html', context)
 
 

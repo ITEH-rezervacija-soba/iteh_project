@@ -1,20 +1,34 @@
 {% include 'room_reservation/base.html' %}
 {% load static %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete</title>
-</head>
-<body>
+
+    <p class="hotel_heading" style="margin-left:0px"> Cancel your reservation</p>
     <p>{{ message }}</p>
-    <form action="{% url "delete_reservation" reservation.id %}" method="POST">
+    <form action="{% url "delete_reservation" reservation.id %}" method="POST" class="delete_form">
         {% csrf_token %}
-        <a href="{% url 'homepage'%}">Cancel</a>
-        <input type="submit" name="Confirm">
+        <a href="{% url 'profile'%}">Cancel</a>
+        <input type="submit" name="Confirm" id="submit">
     </form>
 
-</body>
-</html>
+     <br>
+    <br>
+     <div class="hotel_card">
+    <div class="card mb-3" style="max-width: 1240px; height: 310px">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{{ hotel.hotel_image.url }}" class="card-img, hotel_img" alt="Hotel image">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'hotel_page' hotel.id %}" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%"> {{ hotel.hotel_name }} </a></h5>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" > <i class="fas fa-map-marker-alt"></i>  {{ hotel.address}}, {{ hotel.city_name }} </p>
+            <p class="card-text" style="padding-left: 5%;padding-top: 0%;padding-bottom: 0%" ><small class="text-muted"> {{ hotel.hotel_description }} </small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+     <footer style="background: #3D405B;height: 40px; text-align: center; color: black; padding-top: 5px;position: relative">
+       © 2020 Copyright: MAS.com
+    </footer>
 {% endblock %}

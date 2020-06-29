@@ -2,12 +2,11 @@
 {% load static %}
 {% block content %}
 
-
-   <div class="divhotelname" style="text-align: left"> <p class="hotelname"> {{ hotel.hotel_name }}</p> </div>
+  <p class="hotel_heading"> {{ hotel.hotel_name }}, {{ hotel.city_name }} </p>
    <div class="container">
       <div class="row">
         <div class="col-4">
-            <p class="hotel_desc"> {{ hotel.hotel_description }}</p>
+            <p class="hotel_desc"><i class="fas fa-sticky-note"></i> {{ hotel.hotel_description }}</p>
         </div>
         <div class="col-8">
             <div class="hotel_carousel">
@@ -43,12 +42,8 @@
     </div>
 
     <hr>
-    <p style="color: #3D405B;
-    text-align: left;
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 0;"> Book a room</p>
-    <form method="GET" class="res_form">
+    <p class="hotel_heading"> Book a room</p>
+    <form method="GET" class="form_div">
     {{my_filter.form}}
     <button type="submit" id="submit" style="position: relative">Search</button>
     </form>
@@ -96,7 +91,7 @@
         </table>
     </div>
 </div>
-    <footer style="background: #3D405B;height: 40px; text-align: center; color: black; padding-top: 5px;position: relative">
+    <footer>
        © 2020 Copyright: MAS.com
     </footer>
 {% endblock %}

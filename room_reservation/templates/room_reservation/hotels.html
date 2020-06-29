@@ -1,11 +1,7 @@
 {% include 'room_reservation/base.html' %}
 {% block content %}
 
-    <p style="color: #3D405B;
-    text-align: left;
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 0;"> Look for a hotel</p>
+    <p class="hotel_heading"> Look for a hotel</p>
     <form method="GET" class="res_form">
     {{my_filter.form}}
     <button type="submit" id="submit" style="position: relative">Search</button>

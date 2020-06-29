@@ -15,13 +15,16 @@
 
     <title>Room reservation</title>
   </head>
-  <body style="background: #F4F1DE">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <body style="background: white">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #3D405B">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse w-100 dual-collapse2 order-1 order-md-0" id="navbarNav">
         <ul class="navbar-nav">
+         <li class="nav-item active">
+            <a class="nav-link" href="{% url 'homepage' %}"> <b> MAS BOOKING </b></a>
+          </li>
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'homepage' %}">Home </a>
           </li>

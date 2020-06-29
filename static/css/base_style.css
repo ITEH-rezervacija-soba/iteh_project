@@ -14,10 +14,7 @@
 }
 
 .hotel_carousel{
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 5%;
-    margin-top: 5%;
+    margin: 5% 10%;
     width: 700px;
 }
 
@@ -66,7 +63,7 @@ body, html{
     margin: 0;
     padding: 0;
     height: 100%;
-    background: #F4F1DE;
+    background: white;
 }
 
 p{
@@ -84,7 +81,7 @@ p{
     width: 350px;
     margin-top: auto;
     margin-bottom: auto;
-    background: #F2CC8F;
+    background: #AAD7E6;
     position: relative;
     display: flex;
     justify-content: center;
@@ -107,7 +104,7 @@ p{
 
 .login_btn {
     width: 100%;
-    background: #E07A5F;
+    background: #ADDFAD;
     color: white;
 }
 .login_btn:focus {
@@ -118,7 +115,7 @@ p{
     padding: 0 2rem;
 }
 .input-group-text {
-    background: #81B29A;
+    background: #C5E8CC;
     color: white;
     border: 0;
     border-radius: 0.25rem 0 0 0.25rem;
@@ -199,7 +196,7 @@ h1, h2, h3, h4, h5, p, span, strike{
 }
 
 #submit{
-  background-color: #E07A5F;
+  background-color: #ADDFAD;
   border-radius: 0;
   border:0;
   color: #fff;
@@ -234,10 +231,9 @@ h1, h2, h3, h4, h5, p, span, strike{
 }
 
 .hotel_desc{
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    margin-left: 0px;
+    margin-top:30px;
+    padding: 10px 10px 10px 10px;
 
     text-align: left;
 
@@ -258,15 +254,68 @@ h1, h2, h3, h4, h5, p, span, strike{
     margin-bottom: 50px;
 }
 
-.weather_p{
-    text-align: left;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    line-height: 5px;
-}
-
 .acc_div{
     padding-left: 50px;
     padding-right: 50px;
     padding-bottom: 50px;
+}
+
+footer{
+    background: #3D405B;
+    height: 40px;
+    text-align: center;
+    color: black;
+    padding-top: 5px;
+    position: relative;
+}
+
+.main_heading {
+    color: #ADDFAD;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.form_div{
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    margin-left: 40px;
+    margin-top: 40px;
+}
+
+.weather_card{
+    width: 350px;
+    background: #EBF7F5;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    text-align: center;
+    color: #3D405B;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.hotel_heading{
+    color: #3D405B;
+    text-align: left;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-left: 27%;
+}
+
+.delete_form{
+    margin-left: 60%;
 }

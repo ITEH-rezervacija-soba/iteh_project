@@ -2,7 +2,21 @@
 {% load static %}
 {% block content %}
 
-      <div class="hotel_card">
+    <p class="hotel_heading"> Finish your reservation</p>
+    <form action="" method="POST" class="res_form">
+    {% csrf_token %}
+        {{ form }}
+        <input type="submit" name="Submit" id="submit">
+    </form>
+
+    {% for message in messages %}
+            <p>  {{ message }} </p>
+        {% endfor %}
+
+ <!-- Hotel card -->
+    <br>
+    <br>
+     <div class="hotel_card">
     <div class="card mb-3" style="max-width: 1240px; height: 310px">
       <div class="row no-gutters">
         <div class="col-md-4">
@@ -18,15 +32,9 @@
       </div>
     </div>
     </div>
-    <form action="" method="POST">
-    {% csrf_token %}
-        {{ form }}
-        <input type="submit" name="Submit">
-    </form>
 
+    <footer style="background: #3D405B;height: 40px; text-align: center; color: black; padding-top: 5px;position: relative">
+       © 2020 Copyright: MAS.com
+    </footer>
 
-
-    {% for message in messages %}
-            <p>  {{ message }} </p>
-        {% endfor %}
 {% endblock %}

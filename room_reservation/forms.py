@@ -5,6 +5,7 @@ from pylint.checkers.typecheck import _
 
 from .models import ReservationModel
 from datetime import date
+
 TIME_FORMAT = '%d.%m.%Y'
 
 
@@ -15,10 +16,9 @@ class CreateUserForm(UserCreationForm):
 
 
 class CreateReservationForm(ModelForm):
-
     start_date = DateField(input_formats=[TIME_FORMAT])
     end_date = DateField(input_formats=[TIME_FORMAT])
 
     class Meta:
         model = ReservationModel
-        fields = ['accommodation','start_date','end_date']
+        fields = ['accommodation', 'start_date', 'end_date']

@@ -10,21 +10,21 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item">
-        <img src="{% static 'images/perugia.jpg' %}" class="d-block w-100" alt="...">
+        <img src="{% static 'images/london.jpg' %}" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
-            <h1>Perugia</h1>
+            <h1 style="color: #3D405B">Book your stay in London now</h1>
         </div>
         </div>
         <div class="carousel-item active">
-        <img src="{% static 'images/dresden.jpg'%}" class="d-block w-100" alt="...">
+        <img src="{% static 'images/belgrade.jpg'%}" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
-            <h1>Dresden</h1>
+            <h1 style="color: white">Use MAS to book your stay in Belgrade </h1>
         </div>
         </div>
         <div class="carousel-item">
-        <img src="{% static 'images/florence.jpg' %}" class="d-block w-100" alt="...">
+        <img src="{% static 'images/paris.jpg' %}" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
-            <h1>Florence</h1>
+            <h1 style="color: white">Visit the city of lights</h1>
         </div>
         </div>
 
@@ -40,9 +40,11 @@
    </div>
 </div>
 
+    <h1 class="main_heading" style="color: #90CCE1"> Best cities to visit in 2021 </h1>
 <div class="container">
   <div class="row">
     <div class="col-sm">
+        <div class="weather_card">
         <p class="weather_p">
         <h1> Belgrade </h1>
          <i class="fas fa-info-circle"></i> Current temperature: {{ belgrade.temp }}<br>
@@ -50,8 +52,10 @@
          <i class="fas fa-temperature-high"></i> Max temperature: {{ belgrade.temp_max }}<br>
          <i class="fas fa-tint"></i> Humidity: {{ belgrade.humidity }}<br>
         </p>
+        </div>
     </div>
     <div class="col-sm">
+        <div class="weather_card">
         <p class="weather_p">
         <h1> London </h1>
          <i class="fas fa-info-circle"></i> Current temperature: {{ london.temp }}<br>
@@ -59,8 +63,10 @@
          <i class="fas fa-temperature-high"> </i> Max temperature: {{ london.temp_max }}<br>
          <i class="fas fa-tint"></i> Humidity: {{ london.humidity }}<br>
         </p>
+        </div>
     </div>
     <div class="col-sm">
+        <div class="weather_card">
         <p class="weather_p">
         <h1> Paris </h1>
          <i class="fas fa-info-circle"></i> Current temperature: {{ paris.temp }}<br>
@@ -68,6 +74,7 @@
          <i class="fas fa-temperature-high"></i> Max temperature: {{ paris.temp_max }}<br>
          <i class="fas fa-tint"></i> Humidity: {{ paris.humidity }}<br>
         </p>
+        </div>
     </div>
   </div>
 </div>
