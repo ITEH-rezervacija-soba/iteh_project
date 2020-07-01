@@ -41,10 +41,11 @@
 </div>
 
     <h1 class="main_heading" style="color: #90CCE1"> Best cities to visit in 2021 </h1>
-<div class="container">
+
+    <div class="container">
   <div class="row">
-    <div class="col-sm">
-        <div class="weather_card">
+    <div class="col">
+      <div class="weather_card">
         <p class="weather_p">
         <h1> Belgrade </h1>
          <i class="fas fa-info-circle"></i> Current temperature: {{ belgrade.temp }}<br>
@@ -54,8 +55,13 @@
         </p>
         </div>
     </div>
-    <div class="col-sm">
-        <div class="weather_card">
+    <div class="col">
+         <iframe width="450" height="260" style="border: 1px solid #cccccc; margin-top: 50px" src="https://thingspeak.com/channels/1091019/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+    </div>
+  </div>
+    <div class="row">
+    <div class="col">
+     <div class="weather_card">
         <p class="weather_p">
         <h1> London </h1>
          <i class="fas fa-info-circle"></i> Current temperature: {{ london.temp }}<br>
@@ -65,8 +71,13 @@
         </p>
         </div>
     </div>
-    <div class="col-sm">
-        <div class="weather_card">
+    <div class="col">
+      <iframe width="450" height="260" style="border: 1px solid #cccccc;margin-top: 50px" src="https://thingspeak.com/channels/1091019/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+    </div>
+  </div>
+    <div class="row">
+    <div class="col">
+      <div class="weather_card">
         <p class="weather_p">
         <h1> Paris </h1>
          <i class="fas fa-info-circle"></i> Current temperature: {{ paris.temp }}<br>
@@ -76,8 +87,13 @@
         </p>
         </div>
     </div>
+    <div class="col">
+      <iframe width="450" height="260" style="border: 1px solid #cccccc; margin-top: 50px" src="https://thingspeak.com/channels/1091019/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+    </div>
   </div>
+
 </div>
+
     <p style="text-align: right;margin-right: 50px"><i class="fas fa-sun"></i> Click <a href="https://thingspeak.com/channels/1091019"> here</a> to see more  </p>
 <script>
   $( function() {

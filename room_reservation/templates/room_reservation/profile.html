@@ -17,6 +17,7 @@
 <body>
 <br>
 <h1 class="main_heading"> {{ current_user.first_name }} {{ current_user.last_name }}'s reservations </h1>
+
         <div class="form_div">
         <form method="GET">
             {{my_filter.form}}
@@ -106,7 +107,6 @@
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;

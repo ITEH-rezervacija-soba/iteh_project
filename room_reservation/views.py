@@ -53,7 +53,7 @@ def homepage(request):
     london = {'temp': london_temp, 'temp_min': london_temp_min, 'temp_max': london_temp_max,
               'humidity': london_humidity}
 
-    urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field1={london_temp}')
+    #urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field1={london_temp}')
 
     belgrade_data = requests.get(
         "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('Belgrade',
@@ -67,7 +67,7 @@ def homepage(request):
     belgrade_humidity = belgrade_json['main']['humidity']
     belgrade = {'temp': belgrade_temp, 'temp_min': belgrade_temp_min, 'temp_max': belgrade_temp_max,
                 'humidity': belgrade_humidity}
-    urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field2={belgrade_temp}')
+    #urllib.request.urlopen(f'https://api.thingspeak.com/update?api_key={key}&field2={belgrade_temp}')
 
     paris_data = requests.get(
         "http://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units={2}".format('Paris',

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'room_reservation.apps.RoomReservationConfig',
     'rest_framework',
     'api.apps.ApiConfig',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
